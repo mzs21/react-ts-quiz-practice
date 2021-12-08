@@ -58,7 +58,7 @@ export function AuthProvider({ children }: PropsTypeOne) {
     currentUser,
     signUp,
     logIn,
-    logOut
+    logOut,
   };
 
   useEffect(() => {
