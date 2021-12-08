@@ -5,6 +5,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
   updateProfile,
+  User
 } from "firebase/auth";
 import React, { useContext, useEffect, useState } from "react";
 import "../firebase";
@@ -18,21 +19,24 @@ export function useAuth() {
 
 export function AuthProvider({ children }: PropsTypeOne) {
   const [loading, setLoading] = useState(true);
-  const [currentUser, setCurrentUser] = useState();
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
 
+  const auth = getAuth();
   // Signup function
 
   const signUp = async ({ email, password, userName }: AuthProps) => {
-    const auth = getAuth();
+    // const auth = getAuth();
 
     await createUserWithEmailAndPassword(auth, email, password);
 
-    await updateProfile(auth.currentUser, { displayName: userName });
-
-    const user = auth.currentUser;
-
-    setCurrentUser({ ...user });
+    if (auth.currentUser) {
+      await updateProfile(auth.currentUser, { displayName: userName });
+    }
   };
+
+  const user = auth.currentUser;
+
+  setCurrentUser({ ...user });
 
   // Login function
   const logIn = async ({ email, password }: AuthProps) => {
@@ -53,7 +57,7 @@ export function AuthProvider({ children }: PropsTypeOne) {
     currentUser,
     signUp,
     logIn,
-    logOut,
+    logOut
   };
 
   useEffect(() => {
