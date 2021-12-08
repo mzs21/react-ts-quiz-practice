@@ -26,14 +26,13 @@ export function AuthProvider({ children }: PropsTypeOne) {
   // Signup function
 
   const signUp = async ({ email, password, userName }: AuthProps) => {
-    // const auth = getAuth();
-
     await createUserWithEmailAndPassword(auth, email, password);
 
     if (auth.currentUser) {
       await updateProfile(auth.currentUser, { displayName: userName });
 
       const user = auth.currentUser;
+      await updateProfile(auth.currentUser, { displayName: userName });
 
       setCurrentUser({ ...user });
     }
@@ -41,16 +40,12 @@ export function AuthProvider({ children }: PropsTypeOne) {
 
   // Login function
   const logIn = async ({ email, password }: AuthProps) => {
-    // const auth = getAuth();
-
     return signInWithEmailAndPassword(auth, email, password);
   };
 
   // logout function
 
   const logOut = () => {
-    // const auth = getAuth();
-
     return signOut(auth);
   };
 
@@ -58,7 +53,7 @@ export function AuthProvider({ children }: PropsTypeOne) {
     currentUser,
     signUp,
     logIn,
-    logOut,
+    logOut
   };
 
   useEffect(() => {
