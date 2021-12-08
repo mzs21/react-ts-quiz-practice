@@ -5,6 +5,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
   updateProfile,
+  User
 } from "firebase/auth";
 import React, { useContext, useEffect, useState } from "react";
 import "../firebase";
@@ -16,27 +17,31 @@ export function useAuth() {
   return useContext(AuthContext);
 }
 
+const auth = getAuth();
+
 export function AuthProvider({ children }: PropsTypeOne) {
   const [loading, setLoading] = useState(true);
-  const [currentUser, setCurrentUser] = useState();
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   // Signup function
 
   const signUp = async ({ email, password, userName }: AuthProps) => {
-    const auth = getAuth();
+    // const auth = getAuth();
 
     await createUserWithEmailAndPassword(auth, email, password);
 
-    await updateProfile(auth.currentUser, { displayName: userName });
+    if (auth.currentUser) {
+      await updateProfile(auth.currentUser, { displayName: userName });
 
-    const user = auth.currentUser;
+      const user = auth.currentUser;
 
-    setCurrentUser({ ...user });
+      setCurrentUser({ ...user });
+    }
   };
 
   // Login function
   const logIn = async ({ email, password }: AuthProps) => {
-    const auth = getAuth();
+    // const auth = getAuth();
 
     return signInWithEmailAndPassword(auth, email, password);
   };
@@ -44,7 +49,7 @@ export function AuthProvider({ children }: PropsTypeOne) {
   // logout function
 
   const logOut = () => {
-    const auth = getAuth();
+    // const auth = getAuth();
 
     return signOut(auth);
   };
@@ -57,7 +62,7 @@ export function AuthProvider({ children }: PropsTypeOne) {
   };
 
   useEffect(() => {
-    let unsubscribe = onAuthStateChanged(auth, (user) => {
+    let unsubscribe = onAuthStateChanged(auth, (user: User | null) => {
       setCurrentUser(user);
       setLoading(false);
     });
