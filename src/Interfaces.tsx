@@ -1,3 +1,5 @@
+import React from "react";
+
 export interface PropsTypeOne {
   className?: string;
   children: React.ReactNode;
@@ -10,7 +12,6 @@ export interface PropsTypeTwo {
 
 export interface PropsTypeThree {
   icon: string;
-  [rest: string]: string;
 }
 
 export interface AuthProps {
